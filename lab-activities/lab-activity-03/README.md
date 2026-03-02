@@ -54,9 +54,14 @@ PCD a.y. 2025-2026 - ISI LM UNIBO - Cesena Campus
 
        `docker-compose build`
 
-    4) Start a container, mounting also the directory with your Java projects (to be model-checked) to be found (inside the container) in `/pcd`:
+    4) Start a container, mounting also a local directory to be used to host the Java projects to be model-checked. In the following the directory is mounted as `/pcd-jpf` inside the container:
 
-       `docker-compose run --rm -v <your local directory>:/pcd-jpf-projects jpf-dev` 
+       `docker-compose run --rm -v <your local directory>:/pcd-jpf jpf-dev` 
+
+       For instance: mounting the `/pcd-jpf` directory included in the repo (in `lab-activity-03`):
+
+       `docker-compose run --rm -v <path to PCD repo>/pcd-2025-2026/lab-activities/lab-activity-03/pcd-jpf:/pcd-jpf jpf-dev` 
+
 
     5) Build JPF
 
@@ -67,7 +72,16 @@ PCD a.y. 2025-2026 - ISI LM UNIBO - Cesena Campus
         `java -jar build/RunJPF.jar src/examples/Racer.jpf`
       
 - Using JPF
-  - Start the container mounting the [`pcd-jpf`]() directory included in the repo (in `lab-activity-03`)
+  - Preparing the environment:
+    - Start the container mounting the [`pcd-jpf`]() directory included in the repo (in `lab-activity-03`):
+
+   		`docker-compose run --rm -v <path to PCD repo>/pcd-2025-2026/lab-activities/lab-activity-03/pcd-jpf:/pcd-jpf jpf-dev` 
+  	- Compile all Java sources:
+    
+    	`javac -d /pcd-jpf/target/classes -classpath /pcd-jpf/target/classes:/pcd-jpf/lib/jpf.jar /pcd-jpf/src/main/java/pcd/lab03/jpf/*.java`
+ 
+  		(the classpath must include also `jpf.jar` including the Verify API classes)
+
   - **Example #1** - model-checking sequential programs...
     - sequential program - `pcd.lab03.jpf.TestSequential`
       - `java -jar build/RunJPF.jar /pcd-jpf/src/main/java/pcd/lab03/jpf/TestSequential.jpf`
