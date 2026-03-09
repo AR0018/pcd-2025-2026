@@ -11,7 +11,8 @@ public class TestDeadlock {
 		Resource resAlfa = new Resource("Resource-ALFA");
 		Resource resBeta = new Resource("Resource-BETA");
 		new Worker(resAlfa, resBeta).start();
-		new Worker(resBeta, resAlfa).start();
+		//new Worker(resBeta, resAlfa).start(); // causes deadlock, since it makes the problem asymmetric (see dining phylosofers)
+		new Worker(resAlfa, resBeta).start();
 	}
 
 }
