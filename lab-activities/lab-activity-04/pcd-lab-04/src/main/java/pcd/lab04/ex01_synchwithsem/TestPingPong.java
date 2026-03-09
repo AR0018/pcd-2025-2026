@@ -11,8 +11,8 @@ import java.util.concurrent.Semaphore;
  */
 public class TestPingPong {
 	public static void main(String[] args) {
-		Semaphore pingEvent = new Semaphore(0);
-		Semaphore pongEvent = new Semaphore(1);
+		final Semaphore pingEvent = new Semaphore(0);
+		final Semaphore pongEvent = new Semaphore(1);
 
 		new Pinger(pingEvent, pongEvent).start();
 		new Ponger(pingEvent, pongEvent).start();	
