@@ -9,7 +9,6 @@ public class TestBarrier {
 		
 		int nWorkers = 10;
 		
-		/* this barrier is not working */
 		Barrier barrier = new BarrierImpl(nWorkers);
 		
 		List<Worker> workers = new ArrayList<Worker>();
