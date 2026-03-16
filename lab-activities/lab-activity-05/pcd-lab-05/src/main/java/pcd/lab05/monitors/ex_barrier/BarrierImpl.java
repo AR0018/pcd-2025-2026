@@ -26,7 +26,9 @@ public class BarrierImpl implements Barrier {
 			mutex.lock();
 			nArrived++;
 			if(nArrived < nParticipants) {
-				allArrived.await();
+				while(nArrived < nParticipants) {
+					allArrived.await();
+				}
 			} else {
 				allArrived.signalAll();
 			}
