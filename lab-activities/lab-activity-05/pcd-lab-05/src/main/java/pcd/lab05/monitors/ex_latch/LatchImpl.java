@@ -23,7 +23,7 @@ public class LatchImpl implements Latch {
 	public void await() throws InterruptedException {
 		try {
 			mutex.lock();
-			if (workersCount > 0) {
+			while (workersCount > 0) {
 				workersPassed.await();
 			}
 		} finally {
