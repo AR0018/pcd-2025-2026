@@ -13,17 +13,24 @@ public class Test0_Send {
 
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost("localhost");
-		Connection connection = factory.newConnection();
+		try (Connection connection = factory.newConnection();
+			Channel channel = connection.createChannel()) {
 
-		Channel channel = connection.createChannel();
-		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-		String message = "Hello World!";
+			String message = "Hello World!";
 
-		channel.basicPublish(NO_EXCHANGE_USED, QUEUE_NAME, null, message.getBytes("UTF-8"));
-		System.out.println(" [x] Sent '" + message + "'");
+			channel.basicPublish(NO_EXCHANGE_USED, QUEUE_NAME, null, message.getBytes("UTF-8"));
+			System.out.println(" [x] Sent '" + message + "'");
 
-		channel.close();
-		connection.close();
+			/* 
+			 * closing not needed if we use try-with-resources statement 
+			 * because both Connection and Channel implement java.lang.AutoCloseable. 
+			 * 
+			 */
+			// channel.close();
+			// connection.close();
+			
+		}
 	}
 }

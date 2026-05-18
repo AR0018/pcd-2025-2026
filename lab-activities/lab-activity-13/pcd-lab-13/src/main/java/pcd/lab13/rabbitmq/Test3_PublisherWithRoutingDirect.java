@@ -11,19 +11,18 @@ public class Test3_PublisherWithRoutingDirect {
 
     ConnectionFactory factory = new ConnectionFactory();
     factory.setHost("localhost");
-    Connection connection = factory.newConnection();
-    Channel channel = connection.createChannel();
+    try (Connection connection = factory.newConnection();
+    	Channel channel = connection.createChannel()){
 
-    channel.exchangeDeclare(EXCHANGE_NAME, "direct");
+    	channel.exchangeDeclare(EXCHANGE_NAME, "direct");
 
-    String routingKey = "tag-1"; // getSeverity(argv);
-    String message = "hello2"; // getMessage(argv);
+    	String routingKey = "tag-1"; // getSeverity(argv);
+    	String message = "hello2"; // getMessage(argv);
 
-    channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes("UTF-8"));
-    System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
+    	channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes("UTF-8"));
+    	System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
 
-    channel.close();
-    connection.close();
+    }
   }
 
   private static String getSeverity(String[] strings){

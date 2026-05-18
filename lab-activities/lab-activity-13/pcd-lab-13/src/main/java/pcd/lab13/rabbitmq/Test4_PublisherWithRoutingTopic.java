@@ -7,36 +7,19 @@ public class Test4_PublisherWithRoutingTopic {
 
   private static final String EXCHANGE_NAME = "topic_logs";
 
-  public static void main(String[] argv) {
-    Connection connection = null;
-    Channel channel = null;
-    try {
-      ConnectionFactory factory = new ConnectionFactory();
-      factory.setHost("localhost");
+  public static void main(String[] argv) throws Exception {
+    ConnectionFactory factory = new ConnectionFactory();
+    factory.setHost("localhost");
+	try (Connection connection = factory.newConnection();
+		Channel channel = connection.createChannel()) {
+		channel.exchangeDeclare(EXCHANGE_NAME, "topic");
 
-      connection = factory.newConnection();
-      channel = connection.createChannel();
+		String routingKey = getRouting(argv);
+		String message = getMessage(argv);
 
-      channel.exchangeDeclare(EXCHANGE_NAME, "topic");
-
-      String routingKey = getRouting(argv);
-      String message = getMessage(argv);
-
-      channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes("UTF-8"));
-      System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
-
-    }
-    catch  (Exception e) {
-      e.printStackTrace();
-    }
-    finally {
-      if (connection != null) {
-        try {
-          connection.close();
-        }
-        catch (Exception ignore) {}
-      }
-    }
+		channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes("UTF-8"));
+		System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
+	}
   }
 
   private static String getRouting(String[] strings){
